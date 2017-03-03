@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return LadderFragment.newInstance(1);
+                    return LadderFragment.newInstance();
                 case 1:
                     return ProfileFragment.newInstance();
             }
