@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 case 0:
                     return LadderFragment.newInstance(1);
                 case 1:
-                    return ProfileFragment.newInstance("Dummy", "test");
+                    return ProfileFragment.newInstance();
             }
 
             return null;
