@@ -1,5 +1,6 @@
-package com.flaiker.sc2profiler;
+package com.flaiker.sc2profiler.ui;
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,21 +8,30 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.flaiker.sc2profiler.LadderFragment.OnListFragmentInteractionListener;
-import com.flaiker.sc2profiler.dummy.DummyContent.DummyItem;
-
-import java.util.List;
+import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
+import com.flaiker.sc2profiler.R;
+import com.flaiker.sc2profiler.models.Ranking;
 
 public class LadderRecyclerViewAdapter
         extends RecyclerView.Adapter<LadderRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private Cursor mCursor;
 
-    public LadderRecyclerViewAdapter(List<DummyItem> items,
-                                     OnListFragmentInteractionListener listener) {
-        mValues = items;
+    public LadderRecyclerViewAdapter(OnListFragmentInteractionListener listener) {
         mListener = listener;
+    }
+
+    public Cursor swapCursor(Cursor cursor) {
+        if (mCursor == cursor) {
+            return null;
+        }
+        Cursor oldCursor = mCursor;
+        mCursor = cursor;
+        if (cursor != null) {
+            this.notifyDataSetChanged();
+        }
+        return oldCursor;
     }
 
     @Override
@@ -33,10 +43,13 @@ public class LadderRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mRankingTextView.setText(mValues.get(position).id);
-        holder.mPlayerTextView.setText(mValues.get(position).content);
-        holder.mRaceImageView.setImageResource(R.drawable.race_zerg);
+        mCursor.moveToPosition(position);
+        Ranking item = Ranking.ofCursor(mCursor);
+        holder.mItem = item;
+        holder.mRankingTextView.setText(String.valueOf(position + 1)); // TODO: Check order
+        holder.mPlayerTextView.setText((!item.clanTag.equals("") ? "[" + item.clanTag + "] " : "") +
+                item.displayName);
+        holder.mRaceImageView.setImageResource(holder.mItem.race.iconId);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +65,7 @@ public class LadderRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mCursor != null ? mCursor.getCount() : 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,7 +73,7 @@ public class LadderRecyclerViewAdapter
         public final TextView mPlayerTextView;
         public final TextView mRankingTextView;
         public final ImageView mRaceImageView;
-        public DummyItem mItem;
+        public Ranking mItem;
 
         public ViewHolder(View view) {
             super(view);
