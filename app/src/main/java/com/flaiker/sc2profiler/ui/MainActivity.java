@@ -1,4 +1,4 @@
-package com.flaiker.sc2profiler;
+package com.flaiker.sc2profiler.ui;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
 import com.flaiker.sc2profiler.sync.SyncHelper;
 

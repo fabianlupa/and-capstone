@@ -1,4 +1,4 @@
-package com.flaiker.sc2profiler;
+package com.flaiker.sc2profiler.ui;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.flaiker.sc2profiler.R;
 
 public class ProfileFragment extends Fragment {
     private OnFragmentInteractionListener mListener;

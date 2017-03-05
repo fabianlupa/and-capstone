@@ -1,4 +1,4 @@
-package com.flaiker.sc2profiler;
+package com.flaiker.sc2profiler.ui;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 

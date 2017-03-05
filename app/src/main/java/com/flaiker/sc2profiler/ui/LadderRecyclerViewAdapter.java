@@ -1,4 +1,4 @@
-package com.flaiker.sc2profiler;
+package com.flaiker.sc2profiler.ui;
 
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.flaiker.sc2profiler.LadderFragment.OnListFragmentInteractionListener;
+import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
+import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
 
 public class LadderRecyclerViewAdapter
