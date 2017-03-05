@@ -25,6 +25,9 @@
             android:name=".persistence.LadderContentProvider"
             android:authorities="@string/content_authority"
             android:exported="false"/>
+        <service
+            android:name=".sync.LadderSyncIntentService"
+            android:exported="false"/>
     </application>
 
 </manifest>
