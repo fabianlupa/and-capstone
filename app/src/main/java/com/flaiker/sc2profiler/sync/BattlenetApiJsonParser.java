@@ -1,7 +1,9 @@
 package com.flaiker.sc2profiler.sync;
 
 import android.content.ContentValues;
+import android.util.Log;
 
+import com.flaiker.sc2profiler.models.Race;
 import com.flaiker.sc2profiler.persistence.LadderContract.LadderEntry;
 import com.flaiker.sc2profiler.persistence.LadderContract.ProfileEntry;
 
@@ -59,7 +61,7 @@ public final class BattlenetApiJsonParser {
             values.put(LadderEntry.COLUMN_WINS, memberObject.getInt(WINS));
             values.put(LadderEntry.COLUMN_LOSSES, memberObject.getInt(LOSSES));
             values.put(LadderEntry.COLUMN_RACE,
-                    memberObject.getString(FAVORITE_RACE));
+                    memberObject.optString(FAVORITE_RACE, Race.UNKNOWN.toString()));
             contentValues[i] = values;
         }
 

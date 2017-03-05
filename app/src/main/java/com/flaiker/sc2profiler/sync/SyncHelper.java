@@ -31,6 +31,7 @@ public class SyncHelper {
                 // TODO: Check if data is too old
 
                 if (cursor == null || cursor.getCount() == 0) {
+                    // This is already in a new thread so synchronization can be called directly
                     LadderSyncTask.syncLadder(context);
                 }
 
