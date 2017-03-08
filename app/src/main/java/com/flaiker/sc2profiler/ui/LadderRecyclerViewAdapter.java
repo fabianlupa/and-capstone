@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
+import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
 
 public class LadderRecyclerViewAdapter
         extends RecyclerView.Adapter<LadderRecyclerViewAdapter.ViewHolder> {
@@ -22,16 +22,9 @@ public class LadderRecyclerViewAdapter
         mListener = listener;
     }
 
-    public Cursor swapCursor(Cursor cursor) {
-        if (mCursor == cursor) {
-            return null;
-        }
-        Cursor oldCursor = mCursor;
+    void swapCursor(Cursor cursor) {
         mCursor = cursor;
-        if (cursor != null) {
-            this.notifyDataSetChanged();
-        }
-        return oldCursor;
+        notifyDataSetChanged();
     }
 
     @Override

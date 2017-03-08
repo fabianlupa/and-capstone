@@ -25,9 +25,20 @@
             android:name=".persistence.LadderContentProvider"
             android:authorities="@string/content_authority"
             android:exported="false"/>
+
         <service
             android:name=".sync.LadderSyncIntentService"
             android:exported="false"/>
+
+        <activity
+            android:name=".ui.ProfileDetailActivity"
+            android:label="@string/title_activity_profile_detail"
+            android:parentActivityName=".ui.MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.flaiker.sc2profiler.ui.MainActivity"/>
+        </activity>
     </application>
 
 </manifest>
