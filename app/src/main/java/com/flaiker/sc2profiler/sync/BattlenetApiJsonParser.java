@@ -1,7 +1,6 @@
 package com.flaiker.sc2profiler.sync;
 
 import android.content.ContentValues;
-import android.util.Log;
 
 import com.flaiker.sc2profiler.models.Race;
 import com.flaiker.sc2profiler.persistence.LadderContract.LadderEntry;
@@ -19,6 +18,7 @@ public final class BattlenetApiJsonParser {
     private static final String LADDER_MEMBERS_ARR = "ladderMembers";
     private static final String CHARACTER_OBJ = "character";
     private static final String ID = "id";
+    private static final String REALM = "realm";
     private static final String DISPLAY_NAME = "displayName";
     private static final String CLAN_NAME = "clanName";
     private static final String CLAN_TAG = "clanTag";
@@ -31,6 +31,12 @@ public final class BattlenetApiJsonParser {
     private static final String PORTRAIT_LINK = "url";
     private static final String CAREER_OBJ = "career";
     private static final String PRIMARY_RACE = "primaryRace";
+    private static final String SEASON_OBJ = "season";
+    private static final String STATS_ARR = "stats";
+    private static final String STATS_TYPE = "type";
+    private static final String STATS_WINS = "wins";
+    private static final String STATS_GAMES = "games";
+    private static final String STATS_TYPE_1V1 = "1v1";
 
     private BattlenetApiJsonParser() {
         // Static helper class non instantiatable
@@ -49,6 +55,8 @@ public final class BattlenetApiJsonParser {
             ContentValues values = new ContentValues();
             values.put(LadderEntry.COLUMN_CHARACTER_ID,
                     characterObject.getInt(ID));
+            values.put(LadderEntry.COLUMN_REALM,
+                    characterObject.getInt(REALM));
             values.put(LadderEntry.COLUMN_DISPLAY_NAME,
                     characterObject.getString(DISPLAY_NAME));
             values.put(LadderEntry.COLUMN_CLAN_NAME,
@@ -71,18 +79,33 @@ public final class BattlenetApiJsonParser {
     public static ContentValues getContentValuesFromProfileJson(String json)
             throws JSONException {
         JSONObject profileObject = new JSONObject(json);
-        JSONObject portraitObject = profileObject.getJSONObject(PORTRAIT_OBJ);
+        //JSONObject portraitObject = profileObject.getJSONObject(PORTRAIT_OBJ);
         JSONObject careerObject = profileObject.getJSONObject(CAREER_OBJ);
+
+        JSONObject seasonObject = profileObject.optJSONObject(SEASON_OBJ);
+        JSONArray statsArray = null;
+        if (seasonObject != null) statsArray = seasonObject.optJSONArray(STATS_ARR);
 
         ContentValues values = new ContentValues();
 
         values.put(ProfileEntry.COLUMN_CHARACTER_ID, profileObject.getInt(ID));
+        values.put(ProfileEntry.COLUMN_REALM, profileObject.getInt(REALM));
         values.put(ProfileEntry.COLUMN_DISPLAY_NAME, profileObject.getString(DISPLAY_NAME));
         values.put(ProfileEntry.COLUMN_CLAN_NAME, profileObject.getString(CLAN_NAME));
         values.put(ProfileEntry.COLUMN_CLAN_TAG, profileObject.getString(CLAN_TAG));
         values.put(ProfileEntry.COLUMN_PROFILE_PATH, profileObject.getString(PROFILE_PATH));
-        values.put(ProfileEntry.COLUMN_PORTRAIT_LINK, portraitObject.getString(PORTRAIT_LINK));
+        //values.put(ProfileEntry.COLUMN_PORTRAIT_LINK, portraitObject.getString(PORTRAIT_LINK));
         values.put(ProfileEntry.COLUMN_RACE, careerObject.getString(PRIMARY_RACE));
+        if (statsArray != null) {
+            for (int i = 0; i < statsArray.length(); i++) {
+                JSONObject statsObject = statsArray.getJSONObject(i);
+                if (statsObject.optString(STATS_TYPE).equals(STATS_TYPE_1V1)) {
+                    values.put(LadderEntry.COLUMN_WINS, statsObject.getInt(STATS_WINS));
+                    values.put(LadderEntry.COLUMN_LOSSES,
+                            statsObject.getInt(STATS_GAMES) - statsObject.getInt(STATS_WINS));
+                }
+            }
+        }
 
         return values;
     }

@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onListFragmentInteraction(Ranking item) {
         Intent detailIntent = new Intent(this, ProfileDetailActivity.class);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PATH, item.profilePath);
+        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_ID, item.characterId);
+        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_NAME, item.displayName);
+        detailIntent.putExtra(ProfileDetailActivity.EXTRA_REALM, item.realm);
         startActivity(detailIntent);
     }
 

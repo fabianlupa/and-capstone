@@ -15,13 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.flaiker.sc2profiler.R;
-import com.flaiker.sc2profiler.models.Race;
+import com.flaiker.sc2profiler.models.Profile;
 import com.flaiker.sc2profiler.persistence.LadderContract;
+import com.flaiker.sc2profiler.sync.LadderSyncTask;
 
 public class ProfileDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    public static final String EXTRA_PATH = "path";
+    public static final String EXTRA_PROFILE_ID = "id";
+    public static final String EXTRA_PROFILE_NAME = "name";
+    public static final String EXTRA_REALM = "realm";
     private static final int ID_PROFILE_LOADER = 1;
     private static final int ID_LADDER_LOADER = 2;
     private static final int ID_HISTORY_LOADER = 3;
@@ -33,6 +36,11 @@ public class ProfileDetailFragment extends Fragment
     private TextView mRaceTextView;
     private TextView mWinsTextView;
     private TextView mLossesTextView;
+
+    private int mProfileId;
+    private String mProfileName;
+    private int mRealm;
+    private Profile mProfile;
 
     public ProfileDetailFragment() {
     }
@@ -50,19 +58,20 @@ public class ProfileDetailFragment extends Fragment
         mWinsTextView = (TextView) view.findViewById(R.id.wins);
         mLossesTextView = (TextView) view.findViewById(R.id.losses);
 
+        if (savedInstanceState == null) {
+            mProfileId = getArguments().getInt(EXTRA_PROFILE_ID);
+            mProfileName = getArguments().getString(EXTRA_PROFILE_NAME);
+            mRealm = getArguments().getInt(EXTRA_REALM);
+        }
+
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        // TODO: Remove sample data
-        mNameTextView.setText("FlaSh");
-        mRaceImageView.setImageResource(R.drawable.race_terran);
-        mLeagueImageView.setImageResource(R.drawable.league_grandmaster);
-        mRankingTextView.setText("Grandmaster League Rank 1");
-        mRaceTextView.setText(Race.PROTOSS.toString());
-        mWinsTextView.setText(String.valueOf(100));
-        mLossesTextView.setText(String.valueOf(50));
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(ID_PROFILE_LOADER, null, this);
     }
 
     @Override
@@ -74,8 +83,14 @@ public class ProfileDetailFragment extends Fragment
                         getContext(),
                         ladderUri,
                         null,
-                        null,
-                        null,
+                        LadderContract.ProfileEntry.COLUMN_CHARACTER_ID + " = ? AND " +
+                                LadderContract.ProfileEntry.COLUMN_REALM + " = ? AND " +
+                                LadderContract.ProfileEntry.COLUMN_DISPLAY_NAME + " = ?",
+                        new String[]{
+                                String.valueOf(mProfileId),
+                                String.valueOf(mRealm),
+                                mProfileName
+                        },
                         null);
             case ID_LADDER_LOADER:
 
@@ -94,6 +109,28 @@ public class ProfileDetailFragment extends Fragment
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         switch (loader.getId()) {
             case ID_PROFILE_LOADER:
+                if (data.getCount() != 1) {
+                    // Data does not exist in the database or is too old -> fetch it
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LadderSyncTask.fetchNewProfile(getContext(), mProfileId, mRealm,
+                                    mProfileName);
+                            getLoaderManager().initLoader(ID_PROFILE_LOADER, null,
+                                    ProfileDetailFragment.this);
+                        }
+                    });
+                    thread.start();
+                } else {
+                    data.moveToFirst();
+                    mProfile = Profile.ofCursor(data);
+                }
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateUi();
+                    }
+                });
 
                 break;
             case ID_LADDER_LOADER:
@@ -107,6 +144,32 @@ public class ProfileDetailFragment extends Fragment
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+        mProfile = null;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                updateUi();
+            }
+        });
+    }
 
+    private void updateUi() {
+        if (mProfile == null) {
+            mNameTextView.setText("");
+            mRaceTextView.setText("");
+            mLeagueImageView.setImageBitmap(null);
+            mRaceImageView.setImageBitmap(null);
+            mLossesTextView.setText("");
+            mWinsTextView.setText("");
+            mRankingTextView.setText("");
+        } else {
+            mNameTextView.setText(mProfile.name);
+            mRaceTextView.setText(mProfile.race.toString());
+            mRaceImageView.setImageResource(mProfile.race.iconId);
+            mLeagueImageView.setImageResource(mProfile.league.iconId);
+            mLossesTextView.setText(String.valueOf(mProfile.losses));
+            mWinsTextView.setText(String.valueOf(mProfile.wins));
+            mRankingTextView.setText(mProfile.getFormattedRankingText());
+        }
     }
 }

@@ -75,6 +75,32 @@ public class LadderSyncTask {
         // TODO: Implement
     }
 
+    synchronized public static void fetchNewProfile(Context context, int profileId, int realm,
+                                                    String profileName) {
+        Log.d(TAG, String.format("Fetching data for profile %s - %s", profileId, profileName));
+        try {
+            URL profileRequestUrl = buildUrl(SC2_PROFILE_API.buildUpon()
+                    .appendPath(String.valueOf(profileId))
+                    .appendPath(String.valueOf(realm))
+                    .appendPath(profileName)
+                    .appendPath("")
+                    .build());
+            String response = getResponseFromUrl(profileRequestUrl);
+            Log.d(TAG, response);
+            ContentValues profileValues
+                    = BattlenetApiJsonParser.getContentValuesFromProfileJson(response);
+
+            if (profileValues != null) {
+                ContentResolver resolver = context.getContentResolver();
+                resolver.insert(LadderContract.ProfileEntry.CONTENT_URI, profileValues);
+            }
+
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
     private static URL buildUrl(Uri baseUri) throws MalformedURLException {
         return new URL(baseUri.buildUpon()
                 .appendQueryParameter(APIKEY_KEY, BuildConfig.BATTLENET_API_KEY)
