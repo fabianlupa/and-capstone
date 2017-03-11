@@ -33,11 +33,11 @@ public class Profile {
                 cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_DISPLAY_NAME)),
                 cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_CHARACTER_ID)),
                 cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_REALM)),
-                1,
-                League.GRANDMASTER,
+                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_RANK)),
+                League.valueOf(cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_LEAGUE))),
                 Race.valueOf(cursor.getString(cursor.getColumnIndex(ProfileEntry.COLUMN_RACE))),
-                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_WINS)),
-                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_LOSSES)));
+                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_LOSSES)),
+                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_WINS)));
     }
 
     @SuppressLint("DefaultLocale")

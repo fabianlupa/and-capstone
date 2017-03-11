@@ -28,6 +28,7 @@ public class LadderSyncTask {
     private static final String SC2_API_PATH = "sc2";
     private static final String ENDPOINT_PROFILE = "profile";
     private static final String ENDPOINT_LADDER = "ladder";
+    private static final String ENDPOINT_PROFILE_LADDERS = "ladders";
 
     private static final Uri BATTLENET_API_BASE_URI = Uri.parse(BATTLENET_API_BASE_URL);
     private static final Uri BATTLENET_SC2_URI = BATTLENET_API_BASE_URI.buildUpon()
@@ -43,7 +44,6 @@ public class LadderSyncTask {
     private static final String APIKEY_KEY = "apikey";
     private static final String LOCALE_KEY = "locale";
     private static final String LOCALE_VALUE = "en_GB";
-
 
     synchronized public static void syncLadder(Context context) {
         Log.d(TAG, "Starting ladder sync");
@@ -87,8 +87,19 @@ public class LadderSyncTask {
                     .build());
             String response = getResponseFromUrl(profileRequestUrl);
             Log.d(TAG, response);
-            ContentValues profileValues
-                    = BattlenetApiJsonParser.getContentValuesFromProfileJson(response);
+
+            URL ladderRequestUrl = buildUrl(SC2_PROFILE_API.buildUpon()
+                    .appendPath(String.valueOf(profileId))
+                    .appendPath(String.valueOf(realm))
+                    .appendPath(profileName)
+                    .appendPath(ENDPOINT_PROFILE_LADDERS)
+                    .build());
+            String responseLadder = getResponseFromUrl(ladderRequestUrl);
+            Log.d(TAG, responseLadder);
+
+            ContentValues profileValues =
+                    BattlenetApiJsonParser.getContentValuesFromProfileJson(response,
+                            responseLadder);
 
             if (profileValues != null) {
                 ContentResolver resolver = context.getContentResolver();
