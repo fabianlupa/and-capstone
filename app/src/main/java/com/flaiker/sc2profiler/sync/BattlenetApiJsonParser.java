@@ -35,6 +35,11 @@ public final class BattlenetApiJsonParser {
     private static final class Profile {
         static final String PORTRAIT_OBJ = "portrait";
         static final String PORTRAIT_LINK = "url";
+        static final String PORTRAIT_X = "x";
+        static final String PORTRAIT_Y = "y";
+        static final String PORTRAIT_W = "w";
+        static final String PORTRAIT_H = "h";
+        static final String PORTRAIT_OFFSET = "offset";
         static final String ID = "id";
         static final String REALM = "realm";
         static final String CLAN_NAME = "clanName";
@@ -105,7 +110,7 @@ public final class BattlenetApiJsonParser {
                                                                 String jsonLadders)
             throws JSONException {
         JSONObject profileObject = new JSONObject(jsonProfile);
-        //JSONObject portraitObject = profileObject.getJSONObject(PORTRAIT_OBJ);
+        JSONObject portraitObject = profileObject.optJSONObject(Profile.PORTRAIT_OBJ);
         JSONObject careerObject = profileObject.getJSONObject(Profile.CAREER_OBJ);
 
         ContentValues values = new ContentValues();
@@ -116,7 +121,16 @@ public final class BattlenetApiJsonParser {
         values.put(ProfileEntry.COLUMN_CLAN_NAME, profileObject.getString(Profile.CLAN_NAME));
         values.put(ProfileEntry.COLUMN_CLAN_TAG, profileObject.getString(Profile.CLAN_TAG));
         values.put(ProfileEntry.COLUMN_PROFILE_PATH, profileObject.getString(Profile.PROFILE_PATH));
-        //values.put(ProfileEntry.COLUMN_PORTRAIT_LINK, portraitObject.getString(PORTRAIT_LINK));
+        if (portraitObject != null) {
+            values.put(ProfileEntry.COLUMN_PORTRAIT_LINK,
+                    portraitObject.getString(Profile.PORTRAIT_LINK));
+            values.put(ProfileEntry.COLUMN_PORTRAIT_X, portraitObject.getInt(Profile.PORTRAIT_X));
+            values.put(ProfileEntry.COLUMN_PORTRAIT_Y, portraitObject.getInt(Profile.PORTRAIT_Y));
+            values.put(ProfileEntry.COLUMN_PORTRAIT_W, portraitObject.getInt(Profile.PORTRAIT_W));
+            values.put(ProfileEntry.COLUMN_PORTRAIT_H, portraitObject.getInt(Profile.PORTRAIT_H));
+            values.put(ProfileEntry.COLUMN_PORTRAIT_OFFSET,
+                    portraitObject.getInt(Profile.PORTRAIT_OFFSET));
+        }
         values.put(ProfileEntry.COLUMN_RACE, careerObject.getString(Profile.PRIMARY_RACE));
 
 

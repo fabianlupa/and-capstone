@@ -1,6 +1,7 @@
 package com.flaiker.sc2profiler.ui;
 
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,8 @@ import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Profile;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 import com.flaiker.sc2profiler.sync.LadderSyncTask;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 public class ProfileDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -36,6 +39,7 @@ public class ProfileDetailFragment extends Fragment
     private TextView mRaceTextView;
     private TextView mWinsTextView;
     private TextView mLossesTextView;
+    private ImageView mPortraitImageView;
 
     private int mProfileId;
     private String mProfileName;
@@ -57,6 +61,7 @@ public class ProfileDetailFragment extends Fragment
         mRaceTextView = (TextView) view.findViewById(R.id.race);
         mWinsTextView = (TextView) view.findViewById(R.id.wins);
         mLossesTextView = (TextView) view.findViewById(R.id.losses);
+        mPortraitImageView = (ImageView) getActivity().findViewById(R.id.detail_image_view);
 
         if (savedInstanceState == null) {
             mProfileId = getArguments().getInt(EXTRA_PROFILE_ID);
@@ -162,6 +167,7 @@ public class ProfileDetailFragment extends Fragment
             mLossesTextView.setText("");
             mWinsTextView.setText("");
             mRankingTextView.setText("");
+            if (mPortraitImageView != null) mPortraitImageView.setImageBitmap(null);
         } else {
             mNameTextView.setText(mProfile.name);
             mRaceTextView.setText(mProfile.race.toString());
@@ -170,6 +176,28 @@ public class ProfileDetailFragment extends Fragment
             mLossesTextView.setText(String.valueOf(mProfile.losses));
             mWinsTextView.setText(String.valueOf(mProfile.wins));
             mRankingTextView.setText(mProfile.getFormattedRankingText());
+            if (mPortraitImageView != null) {
+                Picasso.with(getContext())
+                        .load(mProfile.portrait.url)
+                        .transform(new Transformation() {
+                            @Override
+                            public Bitmap transform(Bitmap source) {
+                                Bitmap result = Bitmap.createBitmap(source,
+                                        Math.abs(mProfile.portrait.x),
+                                        Math.abs(mProfile.portrait.y), mProfile.portrait.w,
+                                        mProfile.portrait.h);
+                                if (source != result) source.recycle();
+
+                                return result;
+                            }
+
+                            @Override
+                            public String key() {
+                                return "crop()";
+                            }
+                        })
+                        .into(mPortraitImageView);
+            }
         }
     }
 }

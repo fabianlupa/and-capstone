@@ -53,6 +53,11 @@ public final class LadderContract {
         public static final String COLUMN_CLAN_TAG = "clan_tag";
         public static final String COLUMN_PROFILE_PATH = "profile_path";
         public static final String COLUMN_PORTRAIT_LINK = "portrait_link";
+        public static final String COLUMN_PORTRAIT_X = "portrait_pos_x";
+        public static final String COLUMN_PORTRAIT_Y = "portrait_pos_y";
+        public static final String COLUMN_PORTRAIT_H = "portrait_height";
+        public static final String COLUMN_PORTRAIT_W = "portrait_width";
+        public static final String COLUMN_PORTRAIT_OFFSET = "portrait_offset";
         public static final String COLUMN_RACE = "race";
         public static final String COLUMN_FAVORITE = "favorite";
         public static final String COLUMN_WINS = "wins";

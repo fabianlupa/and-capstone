@@ -10,7 +10,7 @@ import static com.flaiker.sc2profiler.persistence.LadderContract.LadderEntry;
 
 public final class LadderDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ladder.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public LadderDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,6 +50,11 @@ public final class LadderDbHelper extends SQLiteOpenHelper {
                     ProfileEntry.COLUMN_CLAN_TAG + " TEXT," +
                     ProfileEntry.COLUMN_PROFILE_PATH + " TEXT NOT NULL," +
                     ProfileEntry.COLUMN_PORTRAIT_LINK + " TEXT," +
+                    ProfileEntry.COLUMN_PORTRAIT_X + " INTEGER," +
+                    ProfileEntry.COLUMN_PORTRAIT_Y + " INTEGER," +
+                    ProfileEntry.COLUMN_PORTRAIT_W + " INTEGER," +
+                    ProfileEntry.COLUMN_PORTRAIT_H + " INTEGER," +
+                    ProfileEntry.COLUMN_PORTRAIT_OFFSET + " INTEGER," +
                     ProfileEntry.COLUMN_RACE + " TEXT NOT NULL," +
                     ProfileEntry.COLUMN_FAVORITE + " INTEGER," +
                     ProfileEntry.COLUMN_LOSSES + " INTEGER," +
