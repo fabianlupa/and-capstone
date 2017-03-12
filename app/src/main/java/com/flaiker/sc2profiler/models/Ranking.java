@@ -1,6 +1,5 @@
 package com.flaiker.sc2profiler.models;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
@@ -9,6 +8,7 @@ import com.flaiker.sc2profiler.persistence.LadderContract.LadderEntry;
 public class Ranking {
     public final int ladderId;
     public final int characterId;
+    public final int realm;
     public final String displayName;
     public final String clanName;
     public final String clanTag;
@@ -18,10 +18,12 @@ public class Ranking {
     public final int losses;
     public final Race race;
 
-    public Ranking(int ladderId, int characterId, String displayName, String clanName,
-                   String clanTag, String profilePath, int points, int wins, int losses, Race race) {
+    public Ranking(int ladderId, int characterId, int realm, String displayName, String clanName,
+                   String clanTag, String profilePath, int points, int wins, int losses,
+                   Race race) {
         this.ladderId = ladderId;
         this.characterId = characterId;
+        this.realm = realm;
         this.displayName = displayName;
         this.clanName = clanName;
         this.clanTag = clanTag;
@@ -32,24 +34,11 @@ public class Ranking {
         this.race = race;
     }
 
-    public static Ranking ofValues(@NonNull ContentValues values) {
-        return new Ranking(
-                values.getAsInteger(LadderEntry.COLUMN_LADDER_ID),
-                values.getAsInteger(LadderEntry.COLUMN_CHARACTER_ID),
-                values.getAsString(LadderEntry.COLUMN_DISPLAY_NAME),
-                values.getAsString(LadderEntry.COLUMN_CLAN_NAME),
-                values.getAsString(LadderEntry.COLUMN_CLAN_TAG),
-                values.getAsString(LadderEntry.COLUMN_PROFILE_PATH),
-                values.getAsInteger(LadderEntry.COLUMN_POINTS),
-                values.getAsInteger(LadderEntry.COLUMN_WINS),
-                values.getAsInteger(LadderEntry.COLUMN_LOSSES),
-                Race.valueOf(values.getAsString(LadderEntry.COLUMN_RACE)));
-    }
-
     public static Ranking ofCursor(@NonNull Cursor cursor) {
         return new Ranking(
                 cursor.getInt(cursor.getColumnIndex(LadderEntry.COLUMN_LADDER_ID)),
                 cursor.getInt(cursor.getColumnIndex(LadderEntry.COLUMN_CHARACTER_ID)),
+                cursor.getInt(cursor.getColumnIndex(LadderEntry.COLUMN_REALM)),
                 cursor.getString(cursor.getColumnIndex(LadderEntry.COLUMN_DISPLAY_NAME)),
                 cursor.getString(cursor.getColumnIndex(LadderEntry.COLUMN_CLAN_NAME)),
                 cursor.getString(cursor.getColumnIndex(LadderEntry.COLUMN_CLAN_TAG)),

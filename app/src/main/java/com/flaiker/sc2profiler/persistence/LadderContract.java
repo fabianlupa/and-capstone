@@ -27,6 +27,7 @@ public final class LadderContract {
         // Columns
         public static final String COLUMN_LADDER_ID = "ladder_id";
         public static final String COLUMN_CHARACTER_ID = "character_id";
+        public static final String COLUMN_REALM = "realm";
         public static final String COLUMN_DISPLAY_NAME = "display_name";
         public static final String COLUMN_CLAN_NAME = "clan_name";
         public static final String COLUMN_CLAN_TAG = "clan_tag";
@@ -35,6 +36,7 @@ public final class LadderContract {
         public static final String COLUMN_WINS = "wins";
         public static final String COLUMN_LOSSES = "losses";
         public static final String COLUMN_RACE = "race";
+        public static final String COLUMN_TIMESTAMP = "request_timestamp";
     }
 
     public static final class ProfileEntry implements BaseColumns {
@@ -46,12 +48,23 @@ public final class LadderContract {
 
         // Columns
         public static final String COLUMN_CHARACTER_ID = "character_id";
+        public static final String COLUMN_REALM = "realm";
         public static final String COLUMN_DISPLAY_NAME = "display_name";
         public static final String COLUMN_CLAN_NAME = "clan_name";
         public static final String COLUMN_CLAN_TAG = "clan_tag";
         public static final String COLUMN_PROFILE_PATH = "profile_path";
         public static final String COLUMN_PORTRAIT_LINK = "portrait_link";
+        public static final String COLUMN_PORTRAIT_X = "portrait_pos_x";
+        public static final String COLUMN_PORTRAIT_Y = "portrait_pos_y";
+        public static final String COLUMN_PORTRAIT_H = "portrait_height";
+        public static final String COLUMN_PORTRAIT_W = "portrait_width";
+        public static final String COLUMN_PORTRAIT_OFFSET = "portrait_offset";
         public static final String COLUMN_RACE = "race";
         public static final String COLUMN_FAVORITE = "favorite";
+        public static final String COLUMN_WINS = "wins";
+        public static final String COLUMN_LOSSES = "losses";
+        public static final String COLUMN_LEAGUE = "league";
+        public static final String COLUMN_RANK = "rank";
+        public static final String COLUMN_TIMESTAMP = "request_timestamp";
     }
 }

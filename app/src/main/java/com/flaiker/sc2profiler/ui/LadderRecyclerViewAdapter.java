@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
+import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
 
 public class LadderRecyclerViewAdapter
         extends RecyclerView.Adapter<LadderRecyclerViewAdapter.ViewHolder> {
@@ -22,16 +22,9 @@ public class LadderRecyclerViewAdapter
         mListener = listener;
     }
 
-    public Cursor swapCursor(Cursor cursor) {
-        if (mCursor == cursor) {
-            return null;
-        }
-        Cursor oldCursor = mCursor;
+    void swapCursor(Cursor cursor) {
         mCursor = cursor;
-        if (cursor != null) {
-            this.notifyDataSetChanged();
-        }
-        return oldCursor;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -50,17 +43,6 @@ public class LadderRecyclerViewAdapter
         holder.mPlayerTextView.setText((!item.clanTag.equals("") ? "[" + item.clanTag + "] " : "") +
                 item.displayName);
         holder.mRaceImageView.setImageResource(holder.mItem.race.iconId);
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mItem);
-                }
-            }
-        });
     }
 
     @Override
@@ -68,7 +50,7 @@ public class LadderRecyclerViewAdapter
         return mCursor != null ? mCursor.getCount() : 0;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final View mView;
         public final TextView mPlayerTextView;
         public final TextView mRankingTextView;
@@ -81,11 +63,17 @@ public class LadderRecyclerViewAdapter
             mPlayerTextView = (TextView) view.findViewById(R.id.ladder_player);
             mRankingTextView = (TextView) view.findViewById(R.id.ladder_rank);
             mRaceImageView = (ImageView) view.findViewById(R.id.ladder_race_icon);
+            view.setOnClickListener(this);
         }
 
         @Override
         public String toString() {
             return super.toString() + " '" + mPlayerTextView.getText() + "'";
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onListFragmentInteraction(mItem);
         }
     }
 }
