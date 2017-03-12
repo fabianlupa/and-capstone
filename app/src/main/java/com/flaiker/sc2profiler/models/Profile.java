@@ -57,6 +57,11 @@ public class Profile {
         return String.format("%s League Rank %d", league.toString(), rankWithinLeague);
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     public static class Portrait {
         public final String url;
         public final int x;
