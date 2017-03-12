@@ -1,24 +1,23 @@
 package com.flaiker.sc2profiler.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.flaiker.sc2profiler.R;
+import com.flaiker.sc2profiler.sync.LadderSyncTask;
 
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements View.OnClickListener {
     private OnFragmentInteractionListener mListener;
-    private TextView mNameTextView;
-    private ImageView mRaceImageView;
-    private ImageView mLeagueImageView;
-    private TextView mRankingTextView;
 
     public ProfileFragment() {
     }
@@ -42,10 +41,10 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mNameTextView = (TextView) view.findViewById(R.id.profile_name);
-        mRaceImageView = (ImageView) view.findViewById(R.id.profile_race_icon);
-        mLeagueImageView = (ImageView) view.findViewById(R.id.profile_league_icon);
-        mRankingTextView = (TextView) view.findViewById(R.id.profile_league_rank_text);
+        Button addProfileOAuthButton = (Button) view.findViewById(R.id.add_profile_oauth_btn);
+        Button addProfileIdButton = (Button) view.findViewById(R.id.add_profile_id_btn);
+        addProfileOAuthButton.setOnClickListener(this);
+        addProfileIdButton.setOnClickListener(this);
 
         return view;
     }
@@ -53,12 +52,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // TODO: Remove sample data
-        mNameTextView.setText("FlaSh");
-        mRaceImageView.setImageResource(R.drawable.race_terran);
-        mLeagueImageView.setImageResource(R.drawable.league_grandmaster);
-        mRankingTextView.setText("Grandmaster League Rank 1");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -83,6 +76,50 @@ public class ProfileFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.add_profile_oauth_btn:
+                //addProfileWithOAuth();
+                break;
+            case R.id.add_profile_id_btn:
+                addProfileWithId();
+        }
+    }
+
+    private void addProfileWithId() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View view = inflater.inflate(R.layout.dialog_add_profile, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        final EditText userIdInput = (EditText) view.findViewById(R.id.text_profile_id);
+        final EditText userNameInput = (EditText) view.findViewById(R.id.text_profile_name);
+
+        AlertDialog dialog = builder
+                .setCancelable(true)
+                .setPositiveButton(R.string.add_profile, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                LadderSyncTask.fetchNewProfile(getContext(),
+                                        Integer.parseInt(userIdInput.getText().toString()), 1,
+                                        userNameInput.getText().toString());
+                            }
+                        });
+                        thread.start();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                }).create();
+        dialog.show();
     }
 
     public interface OnFragmentInteractionListener {
