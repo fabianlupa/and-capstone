@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Profile;
@@ -68,6 +70,34 @@ public class ProfileDetailFragment extends Fragment
             mProfileName = getArguments().getString(EXTRA_PROFILE_NAME);
             mRealm = getArguments().getInt(EXTRA_REALM);
         }
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mProfile == null) return;
+
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LadderSyncTask.setProfileFavorite(getContext(), !mProfile.favorite,
+                                mProfileId, mRealm, mProfileName);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getContext(),
+                                        mProfile.favorite
+                                                ? getString(R.string.removed_favorite)
+                                                : getString(R.string.added_favorite),
+                                        Toast.LENGTH_SHORT)
+                                        .show();
+                            }
+                        });
+                    }
+                });
+                thread.start();
+            }
+        });
 
         return view;
     }

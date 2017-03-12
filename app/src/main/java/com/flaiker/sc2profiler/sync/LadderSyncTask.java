@@ -3,19 +3,23 @@ package com.flaiker.sc2profiler.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
 import com.flaiker.sc2profiler.BuildConfig;
+import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 
 import org.json.JSONException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -106,9 +110,45 @@ public class LadderSyncTask {
                 resolver.insert(LadderContract.ProfileEntry.CONTENT_URI, profileValues);
             }
 
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException(
+                    String.format(Locale.getDefault(),
+                            context.getString(R.string.profile_not_found),
+                            profileId,
+                            profileName));
         } catch (JSONException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    synchronized public static void setProfileFavorite(Context context, boolean isFavorite,
+                                                       int profileId, int realm,
+                                                       String profileName) {
+        ContentResolver resolver = context.getContentResolver();
+        Cursor cursor = resolver.query(
+                LadderContract.ProfileEntry.CONTENT_URI,
+                new String[]{LadderContract.ProfileEntry._ID},
+                LadderContract.ProfileEntry.COLUMN_CHARACTER_ID + " = ? AND " +
+                        LadderContract.ProfileEntry.COLUMN_REALM + " = ? AND " +
+                        LadderContract.ProfileEntry.COLUMN_DISPLAY_NAME + " = ?",
+                new String[]{String.valueOf(profileId), String.valueOf(realm), profileName},
+                null);
+
+        if (cursor != null && cursor.getCount() == 1) {
+            cursor.moveToFirst();
+            int internalId = cursor.getInt(0);
+            cursor.close();
+
+            ContentValues values = new ContentValues();
+            values.put(LadderContract.ProfileEntry.COLUMN_FAVORITE, isFavorite);
+            resolver.update(
+                    LadderContract.ProfileEntry.CONTENT_URI,
+                    values,
+                    LadderContract.ProfileEntry._ID + " = ?",
+                    new String[]{String.valueOf(internalId)});
+        } else {
+            throw new IllegalArgumentException("Profile could not be found");
         }
     }
 

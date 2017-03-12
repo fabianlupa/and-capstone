@@ -16,10 +16,11 @@ public class Profile {
     public final int losses;
     public final int wins;
     public final Portrait portrait;
+    public final boolean favorite;
 
     public Profile(String name, int id, int realm, int rankWithinLeague, League league,
                    Race race, int losses, int wins, String url, int x, int y, int w, int h,
-                   int offset) {
+                   int offset, boolean favorite) {
         this.name = name;
         this.id = id;
         this.realm = realm;
@@ -28,6 +29,7 @@ public class Profile {
         this.race = race;
         this.losses = losses;
         this.wins = wins;
+        this.favorite = favorite;
         this.portrait = new Portrait(url, x, y, w, h, offset);
     }
 
@@ -46,7 +48,8 @@ public class Profile {
                 cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_PORTRAIT_Y)),
                 cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_PORTRAIT_W)),
                 cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_PORTRAIT_H)),
-                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_PORTRAIT_OFFSET)));
+                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_PORTRAIT_OFFSET)),
+                cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_FAVORITE)) == 1);
     }
 
     @SuppressLint("DefaultLocale")
