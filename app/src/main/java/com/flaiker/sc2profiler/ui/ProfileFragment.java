@@ -61,9 +61,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button addProfileOAuthButton = (Button) view.findViewById(R.id.add_profile_oauth_btn);
         Button addProfileIdButton = (Button) view.findViewById(R.id.add_profile_id_btn);
-        addProfileOAuthButton.setOnClickListener(this);
         addProfileIdButton.setOnClickListener(this);
 
         // Set the adapter
@@ -100,9 +98,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.add_profile_oauth_btn:
-                //addProfileWithOAuth();
-                break;
             case R.id.add_profile_id_btn:
                 addProfileWithId();
         }

@@ -16,12 +16,6 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/add_profile_oauth_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_profile_using_oauth"/>
-
-        <Button
             android:id="@+id/add_profile_id_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
