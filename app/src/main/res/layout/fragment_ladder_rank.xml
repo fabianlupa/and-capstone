@@ -17,7 +17,8 @@
         android:id="@+id/ladder_race_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:src="@drawable/race_protoss" />
+        tools:src="@drawable/race_protoss"
+        android:contentDescription="@string/race_icon"/>
 
     <TextView
         android:id="@+id/ladder_player"
