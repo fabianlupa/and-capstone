@@ -36,6 +36,7 @@ public final class LadderContract {
         public static final String COLUMN_WINS = "wins";
         public static final String COLUMN_LOSSES = "losses";
         public static final String COLUMN_RACE = "race";
+        public static final String COLUMN_TIMESTAMP = "request_timestamp";
     }
 
     public static final class ProfileEntry implements BaseColumns {
@@ -64,5 +65,6 @@ public final class LadderContract {
         public static final String COLUMN_LOSSES = "losses";
         public static final String COLUMN_LEAGUE = "league";
         public static final String COLUMN_RANK = "rank";
+        public static final String COLUMN_TIMESTAMP = "request_timestamp";
     }
 }

@@ -90,7 +90,9 @@ public class ProfileDetailFragment extends Fragment
                         null,
                         LadderContract.ProfileEntry.COLUMN_CHARACTER_ID + " = ? AND " +
                                 LadderContract.ProfileEntry.COLUMN_REALM + " = ? AND " +
-                                LadderContract.ProfileEntry.COLUMN_DISPLAY_NAME + " = ?",
+                                LadderContract.ProfileEntry.COLUMN_DISPLAY_NAME + " = ? AND " +
+                                LadderContract.ProfileEntry.COLUMN_TIMESTAMP +
+                                " >= datetime('now','-10 minutes')",
                         new String[]{
                                 String.valueOf(mProfileId),
                                 String.valueOf(mRealm),

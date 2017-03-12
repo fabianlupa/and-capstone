@@ -25,10 +25,10 @@ public class SyncHelper {
                 Cursor cursor = context.getContentResolver().query(
                         ladderUri,
                         projection,
-                        null,
+                        LadderContract.LadderEntry.COLUMN_TIMESTAMP +
+                                " >= datetime('now','-10 minutes')",
                         null,
                         null);
-                // TODO: Check if data is too old
 
                 if (cursor == null || cursor.getCount() == 0) {
                     // This is already in a new thread so synchronization can be called directly
