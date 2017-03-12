@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:labelFor="@+id/text_profile_id"
-        android:text="Profile ID"/>
+        android:text="@string/profile_id"/>
 
     <EditText
         android:id="@+id/text_profile_id"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:labelFor="@+id/text_profile_name"
-        android:text="Profile name"/>
+        android:text="@string/profile_name"/>
 
     <EditText
         android:id="@+id/text_profile_name"
