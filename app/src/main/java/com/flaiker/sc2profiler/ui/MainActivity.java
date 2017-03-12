@@ -1,7 +1,6 @@
 package com.flaiker.sc2profiler.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,12 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.flaiker.sc2profiler.R;
+import com.flaiker.sc2profiler.models.Profile;
 import com.flaiker.sc2profiler.models.Ranking;
 import com.flaiker.sc2profiler.sync.SyncHelper;
 
 public class MainActivity extends AppCompatActivity implements
         LadderFragment.OnListFragmentInteractionListener,
-        ProfileFragment.OnFragmentInteractionListener {
+        ProfileFragment.OnListFragmentInteractionListener {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
@@ -75,7 +75,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
+    public void onListFragmentInteraction(Profile profile) {
+        Intent detailIntent = new Intent(this, ProfileDetailActivity.class);
+        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_ID, profile.id);
+        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_NAME, profile.name);
+        detailIntent.putExtra(ProfileDetailActivity.EXTRA_REALM, profile.realm);
+        startActivity(detailIntent);
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

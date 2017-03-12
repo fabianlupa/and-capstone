@@ -148,6 +148,21 @@ public class LadderContentProvider extends ContentProvider {
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        throw new RuntimeException("update not implemented");
+        int numRowsUpdated;
+
+        switch (sUriMatcher.match(uri)) {
+            case CODE_PROFILE:
+                numRowsUpdated = mDbHelper.getWritableDatabase().update(
+                        LadderContract.ProfileEntry.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Update not implemented for uri: " + uri);
+        }
+
+        if (numRowsUpdated != 0) getContext().getContentResolver().notifyChange(uri, null);
+        return numRowsUpdated;
     }
 }

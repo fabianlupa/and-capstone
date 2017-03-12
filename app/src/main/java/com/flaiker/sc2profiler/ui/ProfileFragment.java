@@ -2,11 +2,17 @@ package com.flaiker.sc2profiler.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +21,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.flaiker.sc2profiler.R;
+import com.flaiker.sc2profiler.models.Profile;
+import com.flaiker.sc2profiler.persistence.LadderContract;
 import com.flaiker.sc2profiler.sync.LadderSyncTask;
 
-public class ProfileFragment extends Fragment implements View.OnClickListener {
-    private OnFragmentInteractionListener mListener;
+public class ProfileFragment extends Fragment implements View.OnClickListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int ID_PROFILE_LOADER = 1;
+    private OnListFragmentInteractionListener mListener;
+    private ProfileRecyclerViewAdapter mAdapter;
 
     public ProfileFragment() {
     }
@@ -28,6 +40,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(ID_PROFILE_LOADER, null, this);
     }
 
     @Override
@@ -47,6 +66,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         addProfileOAuthButton.setOnClickListener(this);
         addProfileIdButton.setOnClickListener(this);
 
+        // Set the adapter
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.profile_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new ProfileRecyclerViewAdapter(mListener);
+        recyclerView.setAdapter(mAdapter);
+
         return view;
     }
 
@@ -55,18 +80,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -137,7 +155,34 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         dialog.show();
     }
 
-    public interface OnFragmentInteractionListener {
-        void onFragmentInteraction(Uri uri);
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case ID_PROFILE_LOADER:
+                Uri profileUri = LadderContract.ProfileEntry.CONTENT_URI;
+                return new CursorLoader(
+                        getContext(),
+                        profileUri,
+                        null,
+                        LadderContract.ProfileEntry.COLUMN_FAVORITE + " = ?",
+                        new String[]{"1"},
+                        null);
+            default:
+                throw new RuntimeException("Loader not implemented: " + id);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mAdapter.swapCursor(null);
+    }
+
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteraction(Profile profile);
     }
 }

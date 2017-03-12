@@ -136,7 +136,8 @@ public class LadderSyncTask {
                 null);
 
         if (cursor != null && cursor.getCount() == 1) {
-            int internalId = cursor.getInt(1);
+            cursor.moveToFirst();
+            int internalId = cursor.getInt(0);
             cursor.close();
 
             ContentValues values = new ContentValues();
