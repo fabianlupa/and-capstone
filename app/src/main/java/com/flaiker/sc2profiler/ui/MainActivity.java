@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private boolean mTablet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity implements
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        if (findViewById(R.id.item_detail_container) != null) {
+            mTablet = true;
+        }
 
         SyncHelper.init(this);
     }
@@ -67,20 +72,32 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(Ranking item) {
-        Intent detailIntent = new Intent(this, ProfileDetailActivity.class);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_ID, item.characterId);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_NAME, item.displayName);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_REALM, item.realm);
-        startActivity(detailIntent);
+        showProfile(item.characterId, item.displayName, item.realm);
     }
 
     @Override
     public void onListFragmentInteraction(Profile profile) {
-        Intent detailIntent = new Intent(this, ProfileDetailActivity.class);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_ID, profile.id);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_NAME, profile.name);
-        detailIntent.putExtra(ProfileDetailActivity.EXTRA_REALM, profile.realm);
-        startActivity(detailIntent);
+        showProfile(profile.id, profile.name, profile.realm);
+    }
+
+    private void showProfile(int profileId, String profileName, int realm) {
+        if (mTablet) {
+            Bundle args = new Bundle();
+            args.putInt(ProfileDetailFragment.EXTRA_PROFILE_ID, profileId);
+            args.putString(ProfileDetailFragment.EXTRA_PROFILE_NAME, profileName);
+            args.putInt(ProfileDetailFragment.EXTRA_REALM, realm);
+            ProfileDetailFragment fragment = new ProfileDetailFragment();
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.item_detail_container, fragment)
+                    .commit();
+        } else {
+            Intent detailIntent = new Intent(this, ProfileDetailActivity.class);
+            detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_ID, profileId);
+            detailIntent.putExtra(ProfileDetailActivity.EXTRA_PROFILE_NAME, profileName);
+            detailIntent.putExtra(ProfileDetailActivity.EXTRA_REALM, realm);
+            startActivity(detailIntent);
+        }
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
