@@ -8,4 +8,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="profile_detail_horizontal_padding">32dp</dimen>
     <dimen name="profile_detail_vertical_padding">16dp</dimen>
+    <dimen name="sidebar_width">-1dp</dimen>
 </resources>
