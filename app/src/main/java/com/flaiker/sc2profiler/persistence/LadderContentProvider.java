@@ -10,6 +10,8 @@ import android.support.annotation.Nullable;
 
 /**
  * ContentProvider for the ladder database
+ * <p/>
+ * This includes profiles and ladder rankings.
  */
 public class LadderContentProvider extends ContentProvider {
     private static final int CODE_LADDER = 100;

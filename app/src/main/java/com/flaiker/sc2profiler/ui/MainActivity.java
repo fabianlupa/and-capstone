@@ -10,7 +10,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Profile;
@@ -19,6 +18,13 @@ import com.flaiker.sc2profiler.sync.SyncHelper;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+/**
+ * Main activity for the app
+ * <p/>
+ * Layout is split up in two tabs, {@link LadderFragment} and {@link ProfileFragment}. On tablets
+ * {@link ProfileDetailActivity} will not be used and instead its fragment
+ * {@link ProfileDetailFragment} is displayed directly using a master-detail approach.
+ */
 public class MainActivity extends AppCompatActivity implements
         LadderFragment.OnListFragmentInteractionListener,
         ProfileFragment.OnListFragmentInteractionListener {

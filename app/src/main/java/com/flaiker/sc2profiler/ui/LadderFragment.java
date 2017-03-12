@@ -19,6 +19,11 @@ import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 
+/**
+ * Ladder fragment to display rankings withing a ladder / league
+ *
+ * @see MainActivity
+ */
 public class LadderFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final int ID_LADDER_LOADER = 1;
     private OnListFragmentInteractionListener mListener;

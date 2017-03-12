@@ -4,6 +4,9 @@ import android.support.annotation.DrawableRes;
 
 import com.flaiker.sc2profiler.R;
 
+/**
+ * Enumeration for all leagues in the StarCraft II ladder system
+ */
 public enum League {
     GRANDMASTER(R.drawable.league_grandmaster),
     MASTER(R.drawable.league_master),

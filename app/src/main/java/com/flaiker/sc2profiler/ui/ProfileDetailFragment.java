@@ -24,6 +24,11 @@ import com.flaiker.sc2profiler.sync.LadderSyncTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
+/**
+ * Fragment to display profiles
+ *
+ * @see ProfileDetailActivity
+ */
 public class ProfileDetailFragment extends Fragment
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -122,7 +127,7 @@ public class ProfileDetailFragment extends Fragment
                                 LadderContract.ProfileEntry.COLUMN_REALM + " = ? AND " +
                                 LadderContract.ProfileEntry.COLUMN_DISPLAY_NAME + " = ? AND " +
                                 LadderContract.ProfileEntry.COLUMN_TIMESTAMP +
-                                " >= datetime('now','-10 minutes')",
+                                " >= datetime('now','-10 minutes')", // Check if data is too old
                         new String[]{
                                 String.valueOf(mProfileId),
                                 String.valueOf(mRealm),
@@ -208,6 +213,8 @@ public class ProfileDetailFragment extends Fragment
             mLossesTextView.setText(String.valueOf(mProfile.losses));
             mWinsTextView.setText(String.valueOf(mProfile.wins));
             mRankingTextView.setText(mProfile.getFormattedRankingText());
+
+            // Load the portrait image on phone layouts
             if (mPortraitImageView != null) {
                 Picasso.with(getContext())
                         .load(mProfile.portrait.url)

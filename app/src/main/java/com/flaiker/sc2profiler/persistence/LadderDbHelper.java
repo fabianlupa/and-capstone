@@ -8,6 +8,9 @@ import com.flaiker.sc2profiler.persistence.LadderContract.ProfileEntry;
 
 import static com.flaiker.sc2profiler.persistence.LadderContract.LadderEntry;
 
+/**
+ * Helper class for communication with the SQLite database
+ */
 public final class LadderDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "ladder.db";
     private static final int DATABASE_VERSION = 13;
