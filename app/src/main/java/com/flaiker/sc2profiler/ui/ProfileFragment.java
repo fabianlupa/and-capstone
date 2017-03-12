@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.sync.LadderSyncTask;
@@ -105,9 +106,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         Thread thread = new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                LadderSyncTask.fetchNewProfile(getContext(),
-                                        Integer.parseInt(userIdInput.getText().toString()), 1,
-                                        userNameInput.getText().toString());
+                                int profileId = Integer.parseInt(userIdInput.getText().toString());
+                                String profileName = userNameInput.getText().toString();
+                                try {
+                                    LadderSyncTask.fetchNewProfile(getContext(), profileId, 1,
+                                            profileName);
+                                    LadderSyncTask.setProfileFavorite(getContext(), true, profileId, 1,
+                                            profileName);
+                                } catch (final IllegalArgumentException e) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getContext(), e.getMessage(),
+                                                    Toast.LENGTH_LONG)
+                                                    .show();
+                                        }
+                                    });
+                                }
                             }
                         });
                         thread.start();

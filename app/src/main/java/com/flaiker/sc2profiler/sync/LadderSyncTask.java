@@ -8,15 +8,18 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.flaiker.sc2profiler.BuildConfig;
+import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 
 import org.json.JSONException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -107,14 +110,21 @@ public class LadderSyncTask {
                 resolver.insert(LadderContract.ProfileEntry.CONTENT_URI, profileValues);
             }
 
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException(
+                    String.format(Locale.getDefault(),
+                            context.getString(R.string.profile_not_found),
+                            profileId,
+                            profileName));
         } catch (JSONException | IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage(), e);
         }
     }
 
-    public void setProfileFavorite(Context context, boolean isFavorite, int profileId, int realm,
-                                   String profileName) {
+    synchronized public static void setProfileFavorite(Context context, boolean isFavorite,
+                                                       int profileId, int realm,
+                                                       String profileName) {
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(
                 LadderContract.ProfileEntry.CONTENT_URI,

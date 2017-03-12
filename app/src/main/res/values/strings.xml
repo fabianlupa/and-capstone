@@ -16,4 +16,5 @@
     <string name="favorites">Favorites</string>
     <string name="add_profile">Add profile</string>
     <string name="cancel">Cancel</string>
+    <string name="profile_not_found" formatted="false">Profile ID %d name %s could not be found.</string>
 </resources>
