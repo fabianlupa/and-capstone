@@ -10,6 +10,7 @@ import android.util.Log;
 import com.flaiker.sc2profiler.BuildConfig;
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.persistence.LadderContract;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.json.JSONException;
 
@@ -49,8 +50,14 @@ public class LadderSyncTask {
     private static final String LOCALE_KEY = "locale";
     private static final String LOCALE_VALUE = "en_GB";
 
+    private static FirebaseAnalytics sFirebaseAnalytics;
+
     synchronized public static void syncLadder(Context context) {
+        if (sFirebaseAnalytics == null) sFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+
         Log.d(TAG, "Starting ladder sync");
+        sFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, null);
+
         try {
             URL ladderRequestUrl = buildUrl(SC2_LADDER_API.buildUpon()
                     .appendPath("191177") // TODO: Remove hard coded ladder id
@@ -76,12 +83,16 @@ public class LadderSyncTask {
     }
 
     synchronized public static void syncProfiles(Context context) {
+        if (sFirebaseAnalytics == null) sFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         // TODO: Implement
     }
 
     synchronized public static void fetchNewProfile(Context context, int profileId, int realm,
                                                     String profileName) {
+        if (sFirebaseAnalytics == null) sFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+
         Log.d(TAG, String.format("Fetching data for profile %s - %s", profileId, profileName));
+
         try {
             URL profileRequestUrl = buildUrl(SC2_PROFILE_API.buildUpon()
                     .appendPath(String.valueOf(profileId))
