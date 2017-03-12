@@ -6,6 +6,11 @@ import android.support.annotation.NonNull;
 
 import com.flaiker.sc2profiler.persistence.LadderContract.ProfileEntry;
 
+/**
+ * Profile model
+ * <p/>
+ * Represents an immutable StarCraft II profile that can optionally be loaded from a {@link Cursor}.
+ */
 public class Profile {
     public final String name;
     public final int id;
@@ -52,6 +57,9 @@ public class Profile {
                 cursor.getInt(cursor.getColumnIndex(ProfileEntry.COLUMN_FAVORITE)) == 1);
     }
 
+    /**
+     * @return Formatted text including the current rank and league
+     */
     @SuppressLint("DefaultLocale")
     public String getFormattedRankingText() {
         return String.format("%s League Rank %d", league.toString(), rankWithinLeague);
@@ -62,6 +70,9 @@ public class Profile {
         return name;
     }
 
+    /**
+     * Model for the currently selected portrait
+     */
     public static class Portrait {
         public final String url;
         public final int x;

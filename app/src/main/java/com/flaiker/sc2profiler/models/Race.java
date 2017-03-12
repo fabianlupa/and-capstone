@@ -4,6 +4,9 @@ import android.support.annotation.DrawableRes;
 
 import com.flaiker.sc2profiler.R;
 
+/**
+ * Enumeration for all races in StarCraft II, including {@link #RANDOM} and {@link #UNKNOWN}
+ */
 public enum Race {
     PROTOSS(R.drawable.race_protoss),
     ZERG(R.drawable.race_zerg),

@@ -13,6 +13,9 @@ import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Profile;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 
+/**
+ * Widget to display a single bookmarked profile on the homescreen
+ */
 public class ProfileWidget extends AppWidgetProvider {
     private static final String TAG = ProfileWidget.class.getSimpleName();
 

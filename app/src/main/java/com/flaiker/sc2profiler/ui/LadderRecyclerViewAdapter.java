@@ -1,5 +1,6 @@
 package com.flaiker.sc2profiler.ui;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,9 @@ import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Ranking;
 import com.flaiker.sc2profiler.ui.LadderFragment.OnListFragmentInteractionListener;
 
+/**
+ * Recycler view adapter for the ladder list in {@link LadderFragment}
+ */
 public class LadderRecyclerViewAdapter
         extends RecyclerView.Adapter<LadderRecyclerViewAdapter.ViewHolder> {
 
@@ -34,12 +38,13 @@ public class LadderRecyclerViewAdapter
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         mCursor.moveToPosition(position);
         Ranking item = Ranking.ofCursor(mCursor);
         holder.mItem = item;
-        holder.mRankingTextView.setText(String.valueOf(position + 1)); // TODO: Check order
+        holder.mRankingTextView.setText(String.valueOf(position + 1));
         holder.mPlayerTextView.setText((!item.clanTag.equals("") ? "[" + item.clanTag + "] " : "") +
                 item.displayName);
         holder.mRaceImageView.setImageResource(holder.mItem.race.iconId);

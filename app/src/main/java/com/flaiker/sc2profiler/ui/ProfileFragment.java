@@ -25,6 +25,11 @@ import com.flaiker.sc2profiler.models.Profile;
 import com.flaiker.sc2profiler.persistence.LadderContract;
 import com.flaiker.sc2profiler.sync.LadderSyncTask;
 
+/**
+ * Profile fragment to display bookmarked profiles
+ *
+ * @see MainActivity
+ */
 public class ProfileFragment extends Fragment implements View.OnClickListener,
         LoaderManager.LoaderCallbacks<Cursor> {
 

@@ -72,6 +72,13 @@ public final class BattlenetApiJsonParser {
         // Static helper class non instantiatable
     }
 
+    /**
+     * Parse a {@link LadderSyncTask#ENDPOINT_LADDER} response
+     *
+     * @param json Response in JSON
+     * @return Parsed ContentValues
+     * @throws JSONException Parser error
+     */
     public static ContentValues[] getContentValuesFromLadderJson(String json) throws JSONException {
         JSONObject ladderObject = new JSONObject(json);
 
@@ -106,6 +113,15 @@ public final class BattlenetApiJsonParser {
         return contentValues;
     }
 
+    /**
+     * Parse a {@link LadderSyncTask#ENDPOINT_PROFILE} and
+     * {@link LadderSyncTask#ENDPOINT_PROFILE_LADDERS} response
+     *
+     * @param jsonProfile Profile response in JSON
+     * @param jsonLadders Ladders response in JSON
+     * @return Parsed ContentValues
+     * @throws JSONException Parser error
+     */
     public static ContentValues getContentValuesFromProfileJson(String jsonProfile,
                                                                 String jsonLadders)
             throws JSONException {

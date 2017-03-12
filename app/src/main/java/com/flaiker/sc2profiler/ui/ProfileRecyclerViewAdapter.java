@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Profile;
 
+/**
+ * Adapter for the recycler view in {@link ProfileFragment}
+ */
 public class ProfileRecyclerViewAdapter extends
         RecyclerView.Adapter<ProfileRecyclerViewAdapter.ViewHolder> {
 

@@ -5,6 +5,11 @@ import android.support.annotation.NonNull;
 
 import com.flaiker.sc2profiler.persistence.LadderContract.LadderEntry;
 
+/**
+ * Model for a rank withing the StarCraft II ladder system
+ * <p/>
+ * Can optionally be loaded using a {@link Cursor} by {@link #ofCursor(Cursor)}.
+ */
 public class Ranking {
     public final int ladderId;
     public final int characterId;

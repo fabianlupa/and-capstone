@@ -17,6 +17,9 @@ import com.flaiker.sc2profiler.persistence.LadderContract;
 
 import java.util.ArrayList;
 
+/**
+ * Configuration activity for {@link ProfileWidget}
+ */
 public class ProfileWidgetConfigureActivity extends Activity {
     private static final String PREFS_NAME = "com.flaiker.sc2profiler.ui.ProfileWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";

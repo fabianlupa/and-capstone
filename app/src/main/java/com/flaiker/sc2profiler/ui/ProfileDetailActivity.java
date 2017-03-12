@@ -8,6 +8,12 @@ import android.support.v7.widget.Toolbar;
 
 import com.flaiker.sc2profiler.R;
 
+/**
+ * Activity to display profiles
+ * <p/>
+ * Wraps {@link ProfileDetailFragment} in its own activity for phone layouts and deep link
+ * navigation.
+ */
 public class ProfileDetailActivity extends AppCompatActivity {
     public static final String EXTRA_PROFILE_ID = ProfileDetailFragment.EXTRA_PROFILE_ID;
     public static final String EXTRA_PROFILE_NAME = ProfileDetailFragment.EXTRA_PROFILE_NAME;

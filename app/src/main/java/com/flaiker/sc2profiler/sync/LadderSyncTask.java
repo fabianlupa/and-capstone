@@ -60,7 +60,10 @@ public class LadderSyncTask {
 
         try {
             URL ladderRequestUrl = buildUrl(SC2_LADDER_API.buildUpon()
-                    .appendPath("191177") // TODO: Remove hard coded ladder id
+                    /* It is currently not possible to retrieve the grandmaster ladder ids of the
+                       current season from the battlenet api so this has to be hard coded until
+                       there is a rest endpoint for this */
+                    .appendPath("191177")
                     .build());
             String response = getResponseFromUrl(ladderRequestUrl);
             //Log.d(TAG, "Response: \n" + response);
@@ -80,11 +83,6 @@ public class LadderSyncTask {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage(), e);
         }
-    }
-
-    synchronized public static void syncProfiles(Context context) {
-        if (sFirebaseAnalytics == null) sFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-        // TODO: Implement
     }
 
     synchronized public static void fetchNewProfile(Context context, int profileId, int realm,

@@ -26,7 +26,7 @@ public class SyncHelper {
                         ladderUri,
                         projection,
                         LadderContract.LadderEntry.COLUMN_TIMESTAMP +
-                                " >= datetime('now','-10 minutes')",
+                                " >= datetime('now','-10 minutes')", // Check if data is too old
                         null,
                         null);
 
