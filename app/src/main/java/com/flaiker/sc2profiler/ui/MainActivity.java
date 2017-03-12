@@ -16,6 +16,8 @@ import com.flaiker.sc2profiler.R;
 import com.flaiker.sc2profiler.models.Profile;
 import com.flaiker.sc2profiler.models.Ranking;
 import com.flaiker.sc2profiler.sync.SyncHelper;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 public class MainActivity extends AppCompatActivity implements
         LadderFragment.OnListFragmentInteractionListener,
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private AdView mAdView;
     private boolean mTablet;
 
     @Override
@@ -36,6 +39,10 @@ public class MainActivity extends AppCompatActivity implements
 
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        mAdView = (AdView) findViewById(R.id.ad_view);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
