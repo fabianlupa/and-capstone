@@ -9,7 +9,8 @@
         android:id="@+id/profile_race_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:src="@drawable/race_protoss" />
+        android:contentDescription="@string/race_icon"
+        tools:src="@drawable/race_protoss"/>
 
     <TextView
         android:id="@+id/profile_name"
@@ -17,6 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:textAppearance="?attr/textAppearanceListItem"
-        tools:text="Bisu" />
+        tools:text="Bisu"/>
 
 </LinearLayout>

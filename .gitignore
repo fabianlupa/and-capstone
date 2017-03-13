@@ -41,5 +41,4 @@ project.properties
 .gradle
 build/
 
-keystore.properties
 app/google-services.json

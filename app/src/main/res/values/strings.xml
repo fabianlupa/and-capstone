@@ -23,4 +23,6 @@
     <string name="profile_id">Profile ID</string>
     <string name="profile_name">Profile name</string>
     <string name="race_icon">Race icon</string>
+    <string name="league_icon">League icon</string>
+    <string name="switch_favorite">Add / remove favorite</string>
 </resources>
