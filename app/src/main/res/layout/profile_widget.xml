@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/race_icon"
                 android:maxHeight="50dp"
                 android:maxWidth="50dp"
                 tools:src="@drawable/race_terran"/>
@@ -55,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/league_icon"
                 android:maxHeight="25dp"
                 android:maxWidth="25dp"
                 tools:src="@drawable/league_grandmaster"/>
